@@ -1,0 +1,34 @@
+{
+  "name": "slackassit",
+  "version": "0.0.1",
+  "description": "A Slack Bot that assits you in some mundane tasks",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bin/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harryi3t/slackAssist.git"
+  },
+  "keywords": [
+    "slack bot"
+  ],
+  "engines": {
+    "node": "4.0.0"
+  },
+  "author": "harryi3t",
+  "contributors": [
+    "Harendra Singh <66hari@gmail.com>",
+    "Amal Fracis <amalfra@gmail.com>",
+    "Bala <viggi2004@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harryi3t/slackAssist/issues"
+  },
+  "homepage": "https://github.com/harryi3t/slackAssist#readme",
+  "dependencies": {
+    "slackbots": "^0.4.0",
+    "underscore": "^1.8.3"
+  }
+}
