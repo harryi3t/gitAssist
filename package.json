@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/harryi3t/slackAssist#readme",
   "dependencies": {
+    "mongoose": "^4.2.4",
     "slackbots": "^0.4.0",
     "underscore": "^1.8.3"
   }
