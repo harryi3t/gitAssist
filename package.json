@@ -2,9 +2,10 @@
   "name": "slackassit",
   "version": "0.0.1",
   "description": "A Slack Bot that assits you in some mundane tasks",
-  "main": "bot.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node bin/bot.js"
+    "start": "node server.js",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,12 @@
     "mongoose": "^4.2.4",
     "slackbots": "^0.4.0",
     "underscore": "^1.8.3",
-    "async":"*"
-  }
+    "async":"*",
+    "express":"*",
+    "morgan":"*",
+    "body-parser":"*",
+    "method-override":"*",
+    "bower": "*"
+  },
+  "cacheDirectories": ["node_modules", "www/public/bower_components" ]
 }
