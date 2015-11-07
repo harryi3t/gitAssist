@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model('githubModel', {
+module.exports = mongoose.model('Accounts', {
   url: {
     type: String,
     required: true
