@@ -3,24 +3,37 @@
 var self = post;
 module.exports = self;
 
-var URL = require('./Model.js');
+var ACCOUNTS = require('./Model.js');
 
-function post(githubUrl,callback) {
-  console.log('\nStarting api|URL|post| setting url'+githubUrl);
+function post(account,callback) {
+  console.log('Inside post. account:',account);
 
-  URL.remove({},function(err){
+  ACCOUNTS.remove({},function(err){
     if(err)
       console.log(err);
 
-    URL.create({
-      url : githubUrl
+    var url = account.url;
+    var token = getNullOrValue(account.token);
+    var repositories = getNullOrValue(account.repositories);
+
+    ACCOUNTS.create({
+      url : url,
+      token : token,
+      repositories : repositories?repositories:[]
     }, function (err, data) {
       if (err)
         console.log(err);
+      console.log(data);
       if(callback){
         callback(data.url);
       }
     });
 
   });
+}
+
+function getNullOrValue(value){
+  if(typeof value === 'undefined')
+    return null;
+  return value;
 }
