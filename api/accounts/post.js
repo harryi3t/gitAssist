@@ -28,7 +28,7 @@ function post(account,callback) {
         console.log(err);
       console.log(data);
       if(callback){
-        callback(data.url);
+        callback(null,data.url);
       }
     });
 
