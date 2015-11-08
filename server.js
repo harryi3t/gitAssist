@@ -77,7 +77,7 @@ function getAccessToken(code,callback) {
       client_id       : "4cb2e781eaea4040f99d", 
       client_secret   : process.env.BOT_CLIENT_SECRET, 
       code            : code, 
-      redirect_uri    : "http://localhost:3000/auth/github"
+      redirect_uri    : "https://gitassist.herokuapp.com/auth/github"
     },
     headers: {
       "Content-Type": "application/json"
