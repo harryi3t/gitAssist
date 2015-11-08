@@ -3,10 +3,7 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('Accounts', {
-  url: {
-    type: String,
-    required: true
-  },
+  url: String,
   token: String,
   repositories: [String]
 });
