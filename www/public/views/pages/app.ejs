@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="main">
+        <% include ../partials/header %>
+        <div class="container">
+          <div class="starter-template">
+            <h1>Welcome to SlackAssist</h1>
+            <p class="lead">SlackAsist is slack bot that can help you with some very common tasks that require you to check the browser. It can help you with your PR (pull request) status, what your team's member been doing and much more.</p>
+            <p>
+              The bot is still under development. But you can contribute on this project
+              <a  target="_blank" href="https://github.com/harryi3t/slackassist">here</a>
+            </p>
+
+            <% if(typeof status === 'undefined') { %>
+              <blockquote>
+                <p>To access the private repositories of your github account, we need an access token. Please click on the button to authenticate our app to receive the token.</p>
+              </blockquote>
+              
+              <button type="button" class="btn btn-primary" onclick="redirectToGithub()"> Authenticate </button>
+              
+              <% if(typeof error !== 'undefined') { %>
+                <p class="lead">
+                  <%= error %>
+                </p>
+              <% } %>
+            <% } else {%>
+              <p class="lead">
+                <%= status %>
+              </p>
+            <% } %>
+          </div>
+        </div>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/www/public/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/www/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      </div>
+    </div>
+    
+    <div id="footer">
+      <% include ../partials/footer %>
+    </div>
+  </body>
+</html>

@@ -12,15 +12,18 @@ function post(account,callback) {
     if(err)
       console.log(err);
 
-    var url = account.url;
+    var url = getNullOrValue(account.url);
     var token = getNullOrValue(account.token);
     var repositories = getNullOrValue(account.repositories);
 
-    ACCOUNTS.create({
-      url : url,
-      token : token,
-      repositories : repositories?repositories:[]
-    }, function (err, data) {
+
+    var newAccount = {
+      url: url,
+      token: token,
+      repositories: repositories ? repositories : []
+    };
+
+    ACCOUNTS.create(newAccount, function (err, data) {
       if (err)
         console.log(err);
       console.log(data);
