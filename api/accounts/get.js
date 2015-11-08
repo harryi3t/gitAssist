@@ -13,6 +13,13 @@ function get(callback) {
       console.error('Error: ', err.errors.text.message);
       callback(err.errors.text.message);
     }
+    if(!account)
+    account = {
+      url : null,
+      token : null,
+      repositories : []
+    };
+
     console.log(account);
     callback(null,account);
   });
