@@ -29,15 +29,21 @@
   },
   "homepage": "https://github.com/harryi3t/slackAssist#readme",
   "dependencies": {
+    "async": "*",
+    "body-parser": "*",
+    "bower": "*",
+    "connect-flash": "^0.1.1",
+    "express": "*",
+    "method-override": "*",
     "mongoose": "^4.2.4",
+    "morgan": "*",
+    "node-rest-client": "^1.5.1",
     "slackbots": "^0.4.0",
     "underscore": "^1.8.3",
-    "async":"*",
-    "express":"*",
-    "morgan":"*",
-    "body-parser":"*",
-    "method-override":"*",
-    "bower": "*"
+    "ejs":"*"
   },
-  "cacheDirectories": ["node_modules", "www/public/bower_components" ]
+  "cacheDirectories": [
+    "node_modules",
+    "www/public/bower_components"
+  ]
 }
