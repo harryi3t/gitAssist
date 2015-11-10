@@ -10,24 +10,38 @@ console.log('\nRunning commandMap');
 
 var map = [];
 
-function findAndRun(message,replyMessage){
+function findAndRun(message,bot){
   console.log("Searching for commands....");
   var match = false;
-  var run;
-  map.every(function(command){  // fun way of breaking from forEach
-    if(message.text.search(command.pattern) == 0){
+  var run, command;
+
+  map.every(function(commandModule){  // fun way of breaking from forEach
+    if(message.text.search(commandModule.pattern) === 0){
       console.log("command matched");
       match = true;
-      run = command.run;
+      run = commandModule.run;
+      command = commandModule.command;
       return false;
     }
     return true;
   });
-  if(match)
-    run(message,replyMessage,map);
+
+  if(command === 'help'){
+    run(message.text,map,function(replyText){
+      message.text = replyText;
+      bot._reply(message);
+    });
+  }
+  else if(match){
+    run(message.text,function(replyText){
+      message.text = replyText;
+      bot._reply(message);
+    });
+  }
   else{
     console.error("No match found");
-    replyMessage.text = "Command Not Found.\nEnter help to know allowed commands."
+    message.text = "Command Not Found.\nEnter help to know allowed commands.";
+    bot._reply(message);
   }
 
 }
