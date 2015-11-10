@@ -4,11 +4,12 @@ module.exports.pattern = /help/i;
 module.exports.command  = 'help';
 module.exports.run = run;
 
-function run(message,replyMessage,map){
-
-  replyMessage.text = 'Supported Commands are:\n```';
+function run(commandText,map,callback){
+  console.log('map in',map);
+  var replyMessageText = 'Supported Commands are:\n```';
   map.forEach(function(command){
-    replyMessage.text += command.command + '\n';
+    replyMessageText += command.command + '\n';
   });
-  replyMessage.text += '```';
+  replyMessageText += '```';
+  callback(replyMessageText);
 }

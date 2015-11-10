@@ -1,14 +1,18 @@
 'use strict';
 
-module.exports.pattern  = /set\surl\s[a-zA-Z0-9_]+/i;
+module.exports.pattern  = /set\surl\s<[a-zA-Z0-9_:\/\.]+>/i;
 module.exports.command  = 'set url :email';
 module.exports.run = run;
 
-function run(message,replyMessage) {
+var async = require('async');
+var postAccount = require('../api/accounts/post.js');
 
-  var commandParts = message.text.trim().split(' ');
+function run(commandText,callback) {
+  var replyMessageText = '';
+
+  var commandParts = commandText.trim().split(' ');
   if (!_isValidUrl(commandParts[2])) {
-    message.text = 'Invalid URL. Only github urls are allowed :-1::skin-tone-4: ';
+    replyMessageText = 'Invalid URL. Only github urls are allowed :-1::skin-tone-4: ';
     return;
   }
 
@@ -17,15 +21,18 @@ function run(message,replyMessage) {
     url: url
   };
 
+  //replyMessageText = 'This should not be seen';
+
   postAccount(account, function(err, data) {
     if (err) {
-      message.text = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
+      replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
       console.log(err);
-    } else
-      message.text = 'Your repository url is successfully set. :+1::skin-tone-4: ';
-    self._reply(message);
-  });
+    }
+    else
+      replyMessageText = 'Your repository url is successfully set. :+1::skin-tone-4: ';
 
+    callback(replyMessageText);
+  });
 }
 
 function _isValidUrl(url) {
