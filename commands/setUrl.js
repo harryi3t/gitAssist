@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.pattern  = /set\surl\s<[a-zA-Z0-9_:\/\.]+>/i;
+module.exports.pattern  = /set\surl\s<?[a-zA-Z0-9_:\/\.]+>?/i;
 module.exports.command  = 'set url :email';
 module.exports.run = run;
 
@@ -12,7 +12,9 @@ function run(commandText,callback) {
 
   var commandParts = commandText.trim().split(' ');
   if (!_isValidUrl(commandParts[2])) {
-    replyMessageText = 'Invalid URL. Only github urls are allowed :-1::skin-tone-4: ';
+    replyMessageText = 'Invalid URL. Only github urls are allowed\n' + 
+      'Did you forget to prepend `http://` or `https://`';
+    callback(replyMessageText);
     return;
   }
 
