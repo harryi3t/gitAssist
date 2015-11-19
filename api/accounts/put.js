@@ -45,6 +45,8 @@ function put(account, callback) {
         if (err)
           console.log(err);
         console.log('update data', data);
+        if(callback)
+          callback(null, data);
       });
     else
       ACCOUNTS.create(newAccount, function(err, data) {
