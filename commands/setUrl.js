@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports.pattern  = /set\surl\s<?[a-zA-Z0-9_:\/\.]+>?/i;
-module.exports.command  = 'set url :email';
+module.exports.pattern  = /^set\surl\s<?[a-zA-Z0-9_:\/\.]+>?$/i;
+module.exports.command  = 'set url :URL';
 module.exports.run = run;
 
 var async = require('async');
