@@ -9,7 +9,8 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 var router = express.Router();
 var path = require('path');
 var methodOverride = require('method-override');
-var postAccount = require('./api/accounts/post.js');
+var _ = require('underscore');
+var putAccount = require('./api/accounts/put.js');
 
 var token = process.env.BOT_API_KEY;
 
@@ -50,10 +51,11 @@ app.get('/www/*', function(req, res) {
 
 app.get('/auth/github', function(req, res) {
   console.log('code reveived: ',req.query.code);
-  getAccessToken(req.query.code,function(err,data){
+  getAccessToken(req.query.code,function(err,access_token){
     if(err){
      res.render('pages/app',{error:err});
     }else{
+      fillRepositories(access_token);
       res.render('pages/app',{status:"Successfully Authenticated"});
     }
   });
@@ -71,13 +73,14 @@ app.listen(port, function() {
 function getAccessToken(code,callback) {
   var Client = require('node-rest-client').Client;
   var client = new Client();
+  var url = process.env.BOT_REDIRECT_URI || "http://localhost:3000/auth/github";
 
   var args = {
     data: {
       client_id       : "4cb2e781eaea4040f99d", 
       client_secret   : process.env.BOT_CLIENT_SECRET, 
       code            : code, 
-      redirect_uri    : "https://gitassist.herokuapp.com/auth/github"
+      redirect_uri    : url
     },
     headers: {
       "Content-Type": "application/json"
@@ -93,11 +96,11 @@ function getAccessToken(code,callback) {
     if(firstWord === 'access_token'){
       var token = message.split("=")[1].split("&")[0];
       var account = {token : token , url : null};
-      postAccount(account,function(err,data){
+      putAccount(account,function(err,data){
         if(err)
           callback("Error in saving data to db: "+err);
         else
-          callback(null)
+          callback(null,token);
       });
     }else{
       if( message.split("=")[1] === 'bad_verification_code&error_description')
@@ -105,6 +108,26 @@ function getAccessToken(code,callback) {
       else  
         callback(message.split("=")[1]); // erro message
     }
+  });
+}
+
+function fillRepositories(access_token,callback){
+  var Client = require('node-rest-client').Client;
+  var client = new Client();
+  var args = {
+    "headers" : { "User-Agent" : "SlackAssist-App" }
+  };
+
+  console.log("\nCalling github for getting repositories\n");
+
+  client.get("https://api.github.com/user/repos?access_token="+ 
+    access_token + "&sort=updated&per_page=100", args, function(data, response) {
+    var jsonData = JSON.parse(data.toString());
+    var repoInfo = "";
+    
+    jsonData = _.pluck(jsonData,['full_name']);
+    putAccount({repositories : jsonData },null);
+
   });
 }
 

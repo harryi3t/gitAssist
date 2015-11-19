@@ -10,7 +10,7 @@ console.log('\nRunning commandMap');
 
 var map = [];
 
-function findAndRun(message,bot){
+function findAndRun(message,replyCallback){
   console.log("Searching for commands....");
   var match = false;
   var run, command;
@@ -29,19 +29,19 @@ function findAndRun(message,bot){
   if(command === 'help'){
     run(message.text,map,function(replyText){
       message.text = replyText;
-      bot._reply(message);
+      replyCallback(message);
     });
   }
   else if(match){
     run(message.text,function(replyText){
       message.text = replyText;
-      bot._reply(message);
+      replyCallback(message);
     });
   }
   else{
     console.error("No match found");
     message.text = "Command Not Found.\nEnter help to know allowed commands.";
-    bot._reply(message);
+    replyCallback(message);
   }
 
 }

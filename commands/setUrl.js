@@ -1,11 +1,11 @@
 'use strict';
 
-module.exports.pattern  = /set\surl\s<?[a-zA-Z0-9_:\/\.]+>?/i;
-module.exports.command  = 'set url :email';
+module.exports.pattern  = /^set\surl\s<?[a-zA-Z0-9_:\/\.]+>?$/i;
+module.exports.command  = 'set url :URL';
 module.exports.run = run;
 
 var async = require('async');
-var postAccount = require('../api/accounts/post.js');
+var putAccount = require('../api/accounts/put.js');
 
 function run(commandText,callback) {
   var replyMessageText = '';
@@ -25,7 +25,7 @@ function run(commandText,callback) {
 
   //replyMessageText = 'This should not be seen';
 
-  postAccount(account, function(err, data) {
+  putAccount(account, function(err, data) {
     if (err) {
       replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
       console.log(err);

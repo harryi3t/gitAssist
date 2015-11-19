@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.pattern = /help/i;
+module.exports.pattern = /^help$/i;
 module.exports.command  = 'help';
 module.exports.run = run;
 
