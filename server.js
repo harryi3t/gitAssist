@@ -9,7 +9,8 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 var router = express.Router();
 var path = require('path');
 var methodOverride = require('method-override');
-var postAccount = require('./api/accounts/post.js');
+var _ = require('underscore');
+var putAccount = require('./api/accounts/put.js');
 
 var token = process.env.BOT_API_KEY;
 
@@ -93,7 +94,7 @@ function getAccessToken(code,callback) {
     if(firstWord === 'access_token'){
       var token = message.split("=")[1].split("&")[0];
       var account = {token : token , url : null};
-      postAccount(account,function(err,data){
+      putAccount(account,function(err,data){
         if(err)
           callback("Error in saving data to db: "+err);
         else
