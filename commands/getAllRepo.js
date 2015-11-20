@@ -23,7 +23,7 @@ function _getRepos(callback){
       callback(err);
     else{
       var repoList = '';
-      data.repositories.forEach(function(repo){
+      data.privateRepos.forEach(function(repo){
         repoList += '\n' + repo;
       });
       callback(null,repoList);
