@@ -12,7 +12,7 @@ function run(commandText,callback){
     if(err)
       var replyMessageText = 'Error while getting the repositories: ' + err;
     else  
-      var replyMessageText = 'Your repositories are: `' + repos + '`';
+      var replyMessageText = 'Your repositories are: ```' + repos + '```';
     callback(replyMessageText);
   });
 }
