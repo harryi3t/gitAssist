@@ -126,7 +126,7 @@ function fillRepositories(access_token,callback){
     var repoInfo = "";
     
     jsonData = _.pluck(jsonData,['full_name']);
-    putAccount({repositories : jsonData },null);
+    putAccount({privateRepos : jsonData },null);
 
   });
 }
