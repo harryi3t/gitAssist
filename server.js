@@ -121,7 +121,7 @@ function fillRepositories(access_token,callback){
   console.log("\nCalling github for getting repositories\n");
 
   client.get("https://api.github.com/user/repos?access_token="+ 
-    access_token + "&sort=updated&per_page=100", args, function(data, response) {
+    access_token + "&sort=updated&type=private&per_page=100", args, function(data, response) {
     var jsonData = JSON.parse(data.toString());
     var repoInfo = "";
     

@@ -17,7 +17,7 @@ function get(callback) {
     account = {
       url : null,
       token : null,
-      repositories : []
+      privateRepos : []
     };
 
     console.log(account);

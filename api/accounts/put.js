@@ -20,20 +20,20 @@ function put(account, callback) {
       data = {
         url: null,
         token: null,
-        repositories: []
+        privateRepos: []
       };
 
     // If the new value is not present then check for the old value
     var url = getNullOrValue(account.url) || getNullOrValue(data.url);
     var token = getNullOrValue(account.token) || getNullOrValue(data.token);
-    var repositories = getNullOrValue(account.repositories) ||
-      getNullOrValue(data.repositories);
+    var privateRepos = getNullOrValue(account.privateRepos) ||
+      getNullOrValue(data.privateRepos);
 
 
     var newAccount = {
       url: url,
       token: token,
-      repositories: repositories ? repositories : []
+      privateRepos: privateRepos ? privateRepos : []
     };
 
     console.log('new/updated account',newAccount);
