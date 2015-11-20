@@ -12,7 +12,7 @@ function run(commandText,callback){
     if(err)
       var replyMessageText = 'Error while getting the repositories: ' + err;
     else  
-      var replyMessageText = 'Your repositories are: `' + repos + '`';
+      var replyMessageText = 'Your repositories are: ```' + repos + '```';
     callback(replyMessageText);
   });
 }
@@ -23,7 +23,7 @@ function _getRepos(callback){
       callback(err);
     else{
       var repoList = '';
-      data.repositories.forEach(function(repo){
+      data.privateRepos.forEach(function(repo){
         repoList += '\n' + repo;
       });
       callback(null,repoList);
