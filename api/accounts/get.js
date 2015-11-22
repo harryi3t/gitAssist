@@ -15,12 +15,14 @@ function get(callback) {
     }
     if(!account)
     account = {
+      _id : null,
       url : null,
       token : null,
-      privateRepos : []
+      privateRepos : [],
+      monitoredRepos: []
     };
 
-    console.log(account);
+    console.log('\nGetAccount:',account);
     callback(null,account);
   });
 }

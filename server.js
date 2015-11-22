@@ -11,6 +11,7 @@ var path = require('path');
 var methodOverride = require('method-override');
 var _ = require('underscore');
 var putAccount = require('./api/accounts/put.js');
+var getAccount = require('./api/accounts/get.js');
 
 var token = process.env.BOT_API_KEY;
 
@@ -77,10 +78,10 @@ function getAccessToken(code,callback) {
 
   var args = {
     data: {
-      client_id       : "4cb2e781eaea4040f99d", 
+      client_id       : process.env.BOT_CLIENT_PUBLIC || "31500e1e887db90d5473", 
       client_secret   : process.env.BOT_CLIENT_SECRET, 
-      code            : code, 
-      redirect_uri    : url
+      code            : code,
+       redirect_uri    : url
     },
     headers: {
       "Content-Type": "application/json"
@@ -95,13 +96,26 @@ function getAccessToken(code,callback) {
     var firstWord = message.split('=')[0];
     if(firstWord === 'access_token'){
       var token = message.split("=")[1].split("&")[0];
-      var account = {token : token , url : null};
-      putAccount(account,function(err,data){
-        if(err)
-          callback("Error in saving data to db: "+err);
-        else
-          callback(null,token);
+      
+      callback(null,token);
+
+      getAccount(function(err,account){
+        if(err){
+          console.error('err', err);
+          var replyMessageText = "`Error: Database Error`";
+          callback(replyMessageText);
+        }
+        else{
+          account.token = token;
+          putAccount(account, function(err, data) {
+            var replyMessageText = '';
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
       });
+
     }else{
       if( message.split("=")[1] === 'bad_verification_code&error_description')
         callback("The Code sent is expired. Please click on the button again.");
@@ -111,7 +125,7 @@ function getAccessToken(code,callback) {
   });
 }
 
-function fillRepositories(access_token,callback){
+function fillRepositories(access_token){
   var Client = require('node-rest-client').Client;
   var client = new Client();
   var args = {
@@ -121,12 +135,26 @@ function fillRepositories(access_token,callback){
   console.log("\nCalling github for getting repositories\n");
 
   client.get("https://api.github.com/user/repos?access_token="+ 
-    access_token + "&sort=updated&visibility=private&per_page=100", args, function(data, response) {
+    access_token + "&sort=updated&visibility=private&per_page=100", args, 
+    function(data) {
     var jsonData = JSON.parse(data.toString());
-    var repoInfo = "";
     
     jsonData = _.pluck(jsonData,['full_name']);
-    putAccount({privateRepos : jsonData },null);
+    console.log('jsonData',jsonData);
+      
+    getAccount(function(err,account){
+        if(err){
+          console.error('Error:', err);
+        }
+        else{
+          account.privateRepos = jsonData;
+          console.log('Saving account',account);
+          putAccount(account,function(err,data){
+            if(err)
+              console.log('Error while saving private repos:',err);
+          });
+        }
+      });
 
   });
 }

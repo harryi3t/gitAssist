@@ -6,8 +6,10 @@ module.exports.run = run;
 
 var async = require('async');
 var putAccount = require('../api/accounts/put.js');
+var getAccount = require('../api/accounts/get.js');
 
 function run(commandText,callback) {
+  console.log('\nStarting setUrl');
   var replyMessageText = '';
 
   var commandParts = commandText.trim().split(' ');
@@ -19,22 +21,35 @@ function run(commandText,callback) {
   }
 
   var url = commandParts[2];
-  var account = {
-    url: url
-  };
 
-  //replyMessageText = 'This should not be seen';
-
-  putAccount(account, function(err, data) {
-    if (err) {
-      replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
-      console.log(err);
+  getAccount(function(err,account){
+    if(err){
+      console.error('err', err);
+      var replyMessageText = "`Error: Database Error`";
+      callback(replyMessageText);
     }
-    else
-      replyMessageText = 'Your repository url is successfully set. :+1::skin-tone-4: ';
+    else{
+      account.url = url;
+      putAccount(account, function(err, data) {
+        var replyMessageText = '';
+        if (err) {
+          replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
+          console.log(err);
+        }
+        else
+          replyMessageText = 'Your current URL has been updated to ' + 
+            data.url + ':+1::skin-tone-4: ';
 
-    callback(replyMessageText);
+        callback(replyMessageText);
+      });
+    }
   });
+}
+
+function getNullOrValue(value) {
+  if (typeof value === 'undefined')
+    return null;
+  return value;
 }
 
 function _isValidUrl(url) {
