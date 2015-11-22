@@ -6,7 +6,7 @@ module.exports = self;
 var ACCOUNTS = require('./Model.js');
 
 function put(newAccount, callback) {
-  console.log('\nInside put. newAccount:', newAccount);
+  console.log('\nStarting api|accounts|put newAccount:', newAccount);
 
   var update = { $set: newAccount };
 
