@@ -2,8 +2,8 @@
 
 var getAccount = require('../api/accounts/get.js');
 
-module.exports.pattern = /^get current (repo|repository)$/i;
-module.exports.command  = 'get current repo|repository';
+module.exports.pattern = /^show (repos|repositories)$/i;
+module.exports.command  = 'show repos|repositories';
 module.exports.run = run;
 
 function run(commandText,callback){

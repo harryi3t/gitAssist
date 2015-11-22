@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports.pattern  = /^monitor\srepo(\s.*$|$)/i;
-module.exports.command  = 'monitor repo :[user/repo] [org/repo]';
+module.exports.pattern  = /^monitor(\s.*$|$)/i;
+module.exports.command  = 'monitor :[user/repo] [org/repo]';
 module.exports.run = run;
 
 var putAccount = require('../api/accounts/put.js');
@@ -12,20 +12,20 @@ function run(commandText,callback) {
   var replyMessageText = '';
 
   var commandParts = commandText.trim().split(' '); 
-  if(commandParts.length === 2 || 
-    (commandParts.length===3 && commandParts[2] === '')){
+  if(commandParts.length === 1 || 
+    (commandParts.length===2 && commandParts[1] === '')){
     replyMessageText = "`Error: Missing Repository`";
     callback(replyMessageText);
     return;
   }
-  else if(commandParts.length > 3){
+  else if(commandParts.length > 2){
     replyMessageText = '`Error: Invalid Parameter`\nCorrect Usage:' + 
       '`monitor repo :[user/repo] [org/repo]`\n' +
       'Eg. `monitor repo harryi3t/slackassist`';
     callback(replyMessageText);
     return;
   }
-  else if (!_isValidRepo(commandParts[2])) {
+  else if (!_isValidRepo(commandParts[1])) {
     replyMessageText = '`Error: Invalid Repository Name`\n' +
       'Correct Syntax for Repository is `user/repo` or `org/repo`\n' + 
       'Eg. `harryi3t/slackassist`';
