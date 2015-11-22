@@ -33,7 +33,7 @@ function run(commandText,callback) {
     return;
   }
 
-  var repo = commandParts[2];
+  var repo = commandParts[1];
 
   updateAccount(repo,callback);
 }
