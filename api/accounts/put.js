@@ -5,67 +5,30 @@ module.exports = self;
 
 var ACCOUNTS = require('./Model.js');
 
-function put(account, callback) {
-  console.log('Inside put. account:', account);
+function put(newAccount, callback) {
+  console.log('\nInside put. newAccount:', newAccount);
 
-  ACCOUNTS.findOne({}, function(err, data) {
-    if (err){
-      console.log('err', err);
-      return;
-    }
+  var update = { $set: newAccount };
 
-    console.log('findOne Account',data);
-
-    if (!data) 
-      data = {
-        url: null,
-        token: null,
-        privateRepos: []
-      };
-
-    // If the new value is not present then check for the old value
-    var url = getNullOrValue(account.url) || getNullOrValue(data.url);
-    var token = getNullOrValue(account.token) || getNullOrValue(data.token);
-    var privateRepos = getNullOrValue(account.privateRepos) ||
-      getNullOrValue(data.privateRepos);
-
-
-    var newAccount = {
-      url: url,
-      token: token,
-      privateRepos: privateRepos ? privateRepos : []
-    };
-
-    console.log('new/updated account',newAccount);
-
-    var update = { $set: newAccount };
-
-    if (data._id) // data was already present in db so update it
-      ACCOUNTS.findByIdAndUpdate(data._id, update, function(err, data) {
-        if (err)
-          console.log(err);
-        console.log('update data', data);
-        if(callback)
-          callback(null, data);
-      });
-    else
-      ACCOUNTS.create(newAccount, function(err, data) {
-        if (err){
-          if (callback) {
-            callback(err);
-          }else
-            console.error(err);
-        }
-        console.log(data);
+  if (newAccount._id) // data was already present in db so update it
+    ACCOUNTS.findByIdAndUpdate(newAccount._id, update, function(err, oldAccount) {
+      if (err)
+        console.log(err);
+      console.log('\nUpdated Account', newAccount);
+      if(callback)
+        callback(null, newAccount);
+    });
+  else
+    ACCOUNTS.create(newAccount, function(err, data) {
+      if (err){
         if (callback) {
-          callback(null, data);
-        }
-      });
-  });
-}
-
-function getNullOrValue(value) {
-  if (typeof value === 'undefined')
-    return null;
-  return value;
+          callback(err);
+        }else
+          console.error(err);
+      }
+      console.log('\nNew Account Created',data);
+      if (callback) {
+        callback(null, data);
+      }
+    });
 }
