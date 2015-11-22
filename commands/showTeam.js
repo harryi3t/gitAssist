@@ -24,7 +24,9 @@ function _getTeam(callback){
     else{
       var users = '';
       team.forEach(function(user){
-        users += '\n*' + user.name + '* `' + user.username + '`';
+        // *Name* <https://github.com/username|username>
+        users += '\n*' + user.name + '* <' + 
+        "https://github.com/" + user.username + '|' + user.username + '>';
       });
       callback(null,users);
     }
