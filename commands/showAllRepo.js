@@ -2,8 +2,8 @@
 
 var getAccount = require('../api/accounts/get.js');
 
-module.exports.pattern = /^get all (repos|repositories)$/i;
-module.exports.command  = 'get all repos|repositories';
+module.exports.pattern = /^show all (repos|repositories)$/i;
+module.exports.command  = 'show all repos|repositories';
 module.exports.run = run;
 
 function run(commandText,callback){
@@ -12,7 +12,7 @@ function run(commandText,callback){
     if(err)
       var replyMessageText = 'Error while getting the repositories: ' + err;
     else  
-      var replyMessageText = 'Your repositories are: ```' + repos + '```';
+      var replyMessageText = 'Your private repositories are: ```' + repos + '```';
     callback(replyMessageText);
   });
 }
