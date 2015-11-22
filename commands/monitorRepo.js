@@ -4,6 +4,8 @@ module.exports.pattern  = /^monitor(\s.*$|$)/i;
 module.exports.command  = 'monitor :[user/repo] [org/repo]';
 module.exports.run = run;
 
+var Client = require('node-rest-client').Client;
+
 var putAccount = require('../api/accounts/put.js');
 var getAccount = require('../api/accounts/get.js');
 
@@ -33,7 +35,7 @@ function run(commandText,callback) {
     return;
   }
 
-  var repo = commandParts[2];
+  var repo = commandParts[1];
 
   updateAccount(repo,callback);
 }
@@ -50,28 +52,76 @@ function getNullOrValue(value) {
 }
 
 function updateAccount(newRepoToMonitor,callback){
+  //TODO: use aysnc.series
   getAccount(function(err,account){
     if(err){
       console.error('err', err);
-      var replyMessageText = "`Error: Database Error`";
-      callback(replyMessageText);
+      callback("`Error: Database Error`");
     }
     else{
-      // If the new value is not present then check for the old value
-     account.monitoredRepos.push(newRepoToMonitor);
-      putAccount(account, function(err, data) {
-        console.log('Data Returned from putAccount',data);
-        var replyMessageText = '';
-        if (err) {
-          replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
-          console.log(err);
+      //Check if repo is accessible
+      _isRepoAccessible(newRepoToMonitor,function(err,response){
+        if(err){
+          callback(err);
+          return;
         }
-        else
-          replyMessageText = 'The Repository is now monitored. :+1::skin-tone-4: ';
+        if(!response){
+          callback("`Error: Repository Invalid or Not Accessible.`");
+          return;
+        }
+        account.monitoredRepos.push(newRepoToMonitor);
+        putAccount(account, function(err, data) {
+          console.log('Data Returned from putAccount',data);
+          var replyMessageText = '';
+          if (err) {
+            replyMessageText = 'These was some error. :-1::skin-tone-4:\nLeave us a mail about this issue';
+            console.log(err);
+          }
+          else
+            replyMessageText = 'The Repository is now monitored. :+1::skin-tone-4: ';
 
-        callback(replyMessageText);
+          callback(replyMessageText);
+        });
       });
     }
 
   });
 }
+
+function _isRepoAccessible(repo,callback){
+  var access_token = null;
+  var client = new Client();
+  var args = {
+    "headers" : { "User-Agent" : "SlackAssist-App" }
+  };
+
+  _getAccessToken(function(err,token){
+    if(err){
+      console.log(err);
+      callback("`Error: TOKEN not found.`\n" +
+        "Please authorize here https://gitassist.herokuapp.com");
+      return;
+    }
+    access_token = token;
+    console.log("\nCalling github to check the repo");
+
+    client.get("https://api.github.com/repos/" + repo + 
+      "?access_token=" + access_token, args, function(response) {
+        response = JSON.parse(response.toString());
+        if(response.message)
+          callback(null,false);
+        else
+          callback(null,true);
+    });
+  });
+}
+
+function _getAccessToken(callback){
+  getAccount(function(err,account){
+    if(err || !account.token)
+      callback("Token not found");
+    else
+      callback(null,account.token);
+  });
+}
+//TODO: check scenatio 1 : TOKEN NOT FOUND link should come

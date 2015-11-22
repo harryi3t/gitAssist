@@ -6,7 +6,7 @@ module.exports = self;
 var ACCOUNTS = require('./Model.js');
 
 function get(callback) {
-  console.log('\nStarting api|url|get');
+  console.log('\nStarting api|accounts|get');
 
   ACCOUNTS.findOne({},function (err, account) {
     if (err) {
