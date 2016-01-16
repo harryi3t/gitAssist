@@ -1,4 +1,4 @@
-# slackAssist
+# SlackAssist
 
 You can ask this bot about your PR status.
 
