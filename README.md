@@ -1,4 +1,4 @@
-# slackAssist
+# gitAssist
 
 You can ask this bot about your PR status.
 
